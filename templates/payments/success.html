@@ -1,0 +1,25 @@
+{% extends layout %}
+{% block title %}Payment Successful | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box receipt" style="max-width:520px;text-align:center;">
+  <div class="check ok">✓</div>
+  <h2>Payment Successful</h2>
+  <p class="sub">Receipt neeche hai</p>
+
+  <div class="rows" style="text-align:left;">
+    <div class="row"><span>Transaction ID</span><b>{{ payment.txn_id }}</b></div>
+    <div class="row"><span>Paid on</span><span>{{ payment.paid_at|date:"d M Y, h:i A" }}</span></div>
+    <div class="row"><span>Patient</span><span>{{ user.first_name }}</span></div>
+    <div class="row"><span>Doctor</span><span>{{ appt.doctor.name }}</span></div>
+    <div class="row"><span>Appointment</span><span>{{ appt.date }}, {{ appt.time|time:"h:i A" }}</span></div>
+    <div class="row"><span>Fee</span><span>₹{{ payment.amount }}</span></div>
+    <div class="row"><span>GST (18%)</span><span>₹{{ payment.gst }}</span></div>
+    <div class="row total"><span>Total Paid</span><b>₹{{ payment.total }}</b></div>
+  </div>
+
+  <button class="btn btn-block no-print" onclick="window.print()">🖨 Download / Print Receipt</button>
+  <p class="no-print" style="margin-top:12px;">
+    <a class="btn btn-light" href="{% url 'appointments:patient_list' %}">My Appointments</a>
+  </p>
+</div>
+{% endblock %}

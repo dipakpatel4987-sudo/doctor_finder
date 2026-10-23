@@ -1,0 +1,16 @@
+{% extends 'layouts/base.html' %}
+{% block nav %}
+<nav class="nav nav-doctor">
+  <div class="logo"><a href="{% url 'accounts:dashboard' %}">Doctor<span>Finder</span></a><span class="tag">Doctor
+      Panel</span></div>
+  <ul>
+    <li><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'appointments:doctor_list' %}">Appointments</a></li>
+    <li>
+      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+        {% csrf_token %}<button type="submit">Logout (Dr. {{ user.first_name|default:user.email }})</button>
+      </form>
+    </li>
+  </ul>
+</nav>
+{% endblock %}

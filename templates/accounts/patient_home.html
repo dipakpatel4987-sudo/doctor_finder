@@ -1,0 +1,23 @@
+{% extends 'layouts/patient.html' %}
+{% block title %}Patient Panel | Doctor Finder{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="welcome">
+    <h1>Namaste, {{ user.first_name }} 👋</h1>
+    <p>Ye aapka Patient Panel hai. Yahin se doctors dhundein aur apni appointments manage karein.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>{{ total }}</b>Total</div>
+    <div class="stat"><b>{{ pending }}</b>Pending</div>
+    <div class="stat"><b>{{ confirmed }}</b>Confirmed</div>
+    <div class="stat"><b>{{ cancelled }}</b>Cancelled</div>
+  </div>
+
+  <p>
+    <a class="btn" href="{% url 'appointments:book' %}">Book Appointment</a>
+    <a class="btn btn-light" href="{% url 'appointments:patient_list' %}">My Appointments</a>
+    <a class="btn btn-light" href="{% url 'doctors:list' %}">Find Doctors</a>
+  </p>
+</div>
+{% endblock %}

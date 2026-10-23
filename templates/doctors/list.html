@@ -1,0 +1,42 @@
+{% extends layout %}
+{% block title %}Find Doctors | Doctor Finder{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="page-head">Find Doctors</h1>
+
+  <form method="get" class="filter-bar">
+    <input class="form-input" type="text" name="q" value="{{ q }}" placeholder="Naam ya specialty">
+    <select class="form-input" name="specialty">
+      <option value="">All Specialties</option>
+      {% for s in specialties %}<option value="{{ s }}" {% if s == spec %}selected{% endif %}>{{ s }}</option>{% endfor %}
+    </select>
+    <input class="form-input" type="text" name="city" value="{{ city }}" placeholder="City">
+    <button class="btn" type="submit">Search</button>
+    <a class="btn btn-light" href="{% url 'doctors:list' %}">Reset</a>
+  </form>
+
+  <div class="grid">
+    {% for d in page %}
+    <div class="card doc-card">
+      {% if d.photo %}<img class="doc-photo" src="{{ d.photo.url }}" alt="{{ d.name }}">
+      {% else %}<div class="doc-photo">{{ d.name|slice:"4:5" }}</div>{% endif %}
+      <h3>{{ d.name }}</h3>
+      <small>{{ d.specialty }}</small>
+      <p>{{ d.city }} · ₹{{ d.fee }} · ⭐ {{ d.rating }}</p>
+      <a href="{% url 'doctors:detail' d.pk %}" class="btn">View Profile</a>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column:1/-1;text-align:center;">Koi doctor nahi mila. Filter badal kar dekhein.</div>
+    {% endfor %}
+  </div>
+
+  {% if page.has_other_pages %}
+  <div class="pager">
+    {% if page.has_previous %}<a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">&laquo; Prev</a>{% endif %}
+    <span>Page {{ page.number }} / {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}<a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">Next &raquo;</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

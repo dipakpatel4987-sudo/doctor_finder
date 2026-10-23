@@ -1,0 +1,37 @@
+{% extends layout %}
+{% block title %}My Appointments | Doctor Finder{% endblock %}
+{% block content %}
+<div class="container" style="padding:30px 0;">
+  <h1 class="page-head" style="margin-top:10px;">My Appointments</h1>
+  <p style="text-align:center;margin-bottom:18px;"><a class="btn" href="{% url 'appointments:book' %}">+ Nayi Appointment</a></p>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Doctor</th><th>Specialty</th><th>Date</th><th>Time</th><th>Status</th><th>Payment</th><th>Action</th></tr>
+      {% for a in appointments %}
+      <tr>
+        <td>{{ a.doctor.name }}</td>
+        <td>{{ a.doctor.specialty }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time|time:"h:i A" }}</td>
+        <td><span class="tag {{ a.status }}">{{ a.status }}</span></td>
+        <td>
+          {% if a.payment.status == 'Success' %}<span class="tag Confirmed">Paid</span>
+          {% elif a.status != 'Cancelled' %}<a href="{% url 'payments:summary' a.pk %}">Pay Now</a>
+          {% else %}-{% endif %}
+        </td>
+        <td>
+          {% if a.status != 'Cancelled' %}
+          <form method="post" action="{% url 'appointments:patient_cancel' a.pk %}" class="inline"
+                onsubmit="return confirm('Appointment cancel karni hai?');">
+            {% csrf_token %}<button class="mini no">Cancel</button>
+          </form>
+          {% else %}-{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">Abhi koi appointment nahi hai.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Home | Doctor Finder{% endblock %}
+{% block content %}
+<section class="welcome" style="border-radius:0;text-align:center;padding:90px 6%;margin:0;">
+  <h1 style="font-size:clamp(28px,5vw,48px);margin-bottom:12px;">Welcome to Doctor Finder</h1>
+  <p style="opacity:.9;margin-bottom:28px;">Apne shahar ke best doctors dhundo aur appointment book karo.</p>
+  <a href="{% url 'accounts:login' %}" class="btn" style="background:#fff;color:var(--blue);">Login</a>
+  <a href="{% url 'accounts:signup' %}" class="btn">Sign Up</a>
+</section>
+{% endblock %}

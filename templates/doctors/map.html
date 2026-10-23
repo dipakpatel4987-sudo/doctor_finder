@@ -1,0 +1,29 @@
+{% extends layout %}
+{% load static %}
+{% block title %}Doctors Near Me | Doctor Finder{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="page-head">Find Doctors Near You</h1>
+  <div class="filter-bar">
+    <input class="form-input" type="text" id="city" placeholder="City search (e.g. Surat)">
+    <button class="btn" id="near" type="button">📍 Use my location</button>
+  </div>
+  <div class="map-toggle">
+    <button id="t-list" class="on" type="button">List</button>
+    <button id="t-map" type="button">Map</button>
+  </div>
+  <div class="map-layout show-list" id="layout">
+    <div class="map-list" id="list"></div>
+    <div id="map"></div>
+  </div>
+</div>
+{{ doctors_data|json_script:"doctors-data" }}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/doctor_map.js' %}"></script>
+{% endblock %}

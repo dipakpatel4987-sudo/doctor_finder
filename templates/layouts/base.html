@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Doctor Finder{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  {% block nav %}
+  <nav class="nav">
+    <div class="logo"><a href="{% url 'core:home' %}">Doctor<span>Finder</span></a></div>
+    <ul>
+      <li><a href="{% url 'core:home' %}">Home</a></li>
+      <li><a href="{% url 'doctors:list' %}">Doctors</a></li>
+      <li><a href="{% url 'doctors:map' %}">Near Me</a></li>
+      <li><a href="{% url 'accounts:login' %}">Login</a></li>
+      <li><a href="{% url 'accounts:signup' %}">Sign Up</a></li>
+    </ul>
+  </nav>
+  {% endblock %}
+
+  {% if messages %}
+  <div class="container" style="margin-top:14px;">
+    {% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  <footer>&copy; 2026 Doctor Finder. All rights reserved.</footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends 'layouts/doctor.html' %}
+{% block title %}Approval Pending | Doctor Finder{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;margin:60px auto;text-align:center;">
+  <div style="font-size:54px;">⏳</div>
+  <h2 style="color:var(--blue);margin:10px 0;">Approval Pending</h2>
+  <p style="color:#555;">Namaste Dr. {{ user.first_name }}, aapka account abhi admin approval ke liye pending hai. Approval ke baad aapka Doctor Panel khul jayega.</p>
+</div>
+{% endblock %}

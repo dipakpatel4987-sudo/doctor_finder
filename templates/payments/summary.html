@@ -1,0 +1,25 @@
+{% extends layout %}
+{% block title %}Booking Summary | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:520px;">
+  <h2>Booking Summary</h2>
+  <p class="sub">Payment se pehle details check karein</p>
+
+  <div class="rows">
+    <div class="row"><span>Doctor</span><b>{{ appt.doctor.name }}</b></div>
+    <div class="row"><span>Specialty</span><span>{{ appt.doctor.specialty }}</span></div>
+    <div class="row"><span>Date</span><span>{{ appt.date }}</span></div>
+    <div class="row"><span>Time</span><span>{{ appt.time|time:"h:i A" }}</span></div>
+    <div class="row"><span>Consultation Fee</span><span>₹{{ payment.amount }}</span></div>
+    <div class="row"><span>GST (18%)</span><span>₹{{ payment.gst }}</span></div>
+    <div class="row total"><span>Total</span><b>₹{{ payment.total }}</b></div>
+  </div>
+
+  <form method="post" action="{% url 'payments:pay' appt.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-block">Pay ₹{{ payment.total }} with Paytm</button>
+  </form>
+  <p style="text-align:center;margin-top:12px;font-size:13px;color:#777;">🔒 Secure Payment (Test Mode)</p>
+  <div class="auth-foot"><a href="{% url 'appointments:patient_list' %}">Baad me karunga</a></div>
+</div>
+{% endblock %}

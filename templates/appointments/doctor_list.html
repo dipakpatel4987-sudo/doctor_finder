@@ -1,0 +1,50 @@
+{% extends layout %}
+{% block title %}Appointments | Doctor Finder{% endblock %}
+{% block content %}
+<div class="container" style="padding:30px 0;">
+  <h1 class="page-head" style="margin-top:10px;">Patient Appointments</h1>
+
+  {% if not profile %}
+  <div class="card" style="text-align:center;">
+    Aapka login account abhi kisi Doctor profile se link nahi hai. Admin se <b>/admin/ → Doctors</b> me link karwayein.
+  </div>
+  {% else %}
+  <div class="filter-bar">
+    <a class="btn {% if status != '' %}btn-light{% endif %}" href="?">All</a>
+    <a class="btn {% if status != 'Pending' %}btn-light{% endif %}" href="?status=Pending">Pending</a>
+    <a class="btn {% if status != 'Confirmed' %}btn-light{% endif %}" href="?status=Confirmed">Confirmed</a>
+    <a class="btn {% if status != 'Cancelled' %}btn-light{% endif %}" href="?status=Cancelled">Cancelled</a>
+  </div>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Patient</th><th>Phone</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Action</th></tr>
+      {% for a in appointments %}
+      <tr>
+        <td>{{ a.patient.first_name }}</td>
+        <td>{{ a.patient.phone|default:"-" }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time|time:"h:i A" }}</td>
+        <td>{{ a.reason|default:"-"|truncatechars:40 }}</td>
+        <td><span class="tag {{ a.status }}">{{ a.status }}</span></td>
+        <td>
+          {% if a.status == 'Pending' %}
+          <form method="post" action="{% url 'appointments:doctor_update' a.pk 'confirm' %}" class="inline">
+            {% csrf_token %}<button class="mini ok">Confirm</button>
+          </form>
+          {% endif %}
+          {% if a.status != 'Cancelled' %}
+          <form method="post" action="{% url 'appointments:doctor_update' a.pk 'cancel' %}" class="inline"
+                onsubmit="return confirm('Cancel karni hai?');">
+            {% csrf_token %}<button class="mini no">Cancel</button>
+          </form>
+          {% else %}-{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">Koi appointment nahi mili.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

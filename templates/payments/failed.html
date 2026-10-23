@@ -1,0 +1,14 @@
+{% extends layout %}
+{% block title %}Payment Failed | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:480px;text-align:center;">
+  <div class="check bad">✕</div>
+  <h2>Payment Failed</h2>
+  <p class="sub">Payment complete nahi hua. Aapka paisa nahi kata.</p>
+  <form method="post" action="{% url 'payments:pay' appt.pk %}">
+    {% csrf_token %}
+    <button class="btn btn-block">Retry Payment</button>
+  </form>
+  <div class="auth-foot"><a href="{% url 'appointments:patient_list' %}">My Appointments</a></div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends layout %}
+{% block title %}Paytm (Test) | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:480px;text-align:center;">
+  <div class="spinner"></div>
+  <h2>Paytm Test Gateway</h2>
+  <p class="sub">Ye ek demo page hai, asli paisa nahi katega.</p>
+  <p style="margin:14px 0;">Transaction ID: <b>{{ payment.txn_id }}</b></p>
+  <p style="font-size:26px;color:var(--teal);font-weight:700;">₹{{ payment.total }}</p>
+
+  <form method="post" action="{% url 'payments:complete' appt.pk %}">
+    {% csrf_token %}
+    <button class="btn btn-block" name="result" value="success">✅ Payment Success</button>
+    <button class="btn btn-block" name="result" value="fail" style="background:#d93025;">❌ Payment Fail</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends layout %}
+{% block title %}Payment History | Doctor Finder{% endblock %}
+{% block content %}
+<div class="container" style="padding:30px 0;">
+  <h1 class="page-head" style="margin-top:10px;">Payment History</h1>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Date</th><th>Doctor</th><th>Total</th><th>Txn ID</th><th>Status</th><th></th></tr>
+      {% for p in payments %}
+      <tr>
+        <td>{{ p.created_at|date:"d M Y" }}</td>
+        <td>{{ p.appointment.doctor.name }}</td>
+        <td>₹{{ p.total }}</td>
+        <td>{{ p.txn_id|default:"-" }}</td>
+        <td><span class="tag {{ p.status }}">{{ p.status }}</span></td>
+        <td>
+          {% if p.status == 'Success' %}<a href="{% url 'payments:success' p.appointment.pk %}">Receipt</a>
+          {% elif p.appointment.status != 'Cancelled' %}<a href="{% url 'payments:summary' p.appointment.pk %}">Pay</a>{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">Abhi koi payment nahi hai.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

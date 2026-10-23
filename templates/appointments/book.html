@@ -1,0 +1,18 @@
+{% extends layout %}
+{% block title %}Book Appointment | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:520px;">
+  <h2>Book Appointment</h2>
+  <p class="sub">Doctor, date aur time chuniye</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="err">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      <div class="err">{{ field.errors|join:" " }}</div>
+    {% endfor %}
+    <button type="submit" class="btn btn-block">Book Now</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'layouts/doctor.html' %}
+{% block title %}Doctor Panel | Doctor Finder{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="welcome" style="background:linear-gradient(135deg,#1e293b,#0ea5a4);">
+    <h1>Namaste Dr. {{ user.first_name }} 👨‍⚕️</h1>
+    <p>Ye aapka Doctor Panel hai. Yahin se apni appointments confirm ya cancel karein.</p>
+  </div>
+
+  {% if not profile %}
+  <div class="msg error">Aapka account abhi Doctor profile se link nahi hai. Admin se link karwayein.</div>
+  {% endif %}
+
+  <div class="stats">
+    <div class="stat"><b>{{ total }}</b>Total</div>
+    <div class="stat"><b>{{ pending }}</b>Pending</div>
+    <div class="stat"><b>{{ confirmed }}</b>Confirmed</div>
+    <div class="stat"><b>{{ cancelled }}</b>Cancelled</div>
+  </div>
+
+  <p><a class="btn" href="{% url 'appointments:doctor_list' %}">Appointments dekhein</a></p>
+</div>
+{% endblock %}

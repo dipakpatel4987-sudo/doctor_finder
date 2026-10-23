@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Login | Doctor Finder{% endblock %}
+
+{% block content %}
+<div class="auth-box">
+  <h2>Welcome Back</h2>
+  <p class="sub">Apne account me login karein</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="err">Email ya password galat hai.</div>{% endif %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      <div class="err">{{ field.errors|join:" " }}</div>
+    {% endfor %}
+    <button type="submit" class="btn btn-block">Login</button>
+  </form>
+
+  <div class="auth-foot">Naya account? <a href="{% url 'accounts:signup' %}">Sign Up</a></div>
+</div>
+{% endblock %}

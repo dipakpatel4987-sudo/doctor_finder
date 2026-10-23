@@ -1,0 +1,30 @@
+{% extends layout %}
+{% block title %}{{ doctor.name }} | Doctor Finder{% endblock %}
+
+{% block content %}
+<div class="container detail">
+  <div class="card side">
+    {% if doctor.photo %}<img class="doc-photo big" src="{{ doctor.photo.url }}" alt="{{ doctor.name }}">
+    {% else %}<div class="doc-photo big">{{ doctor.name|slice:"4:5" }}</div>{% endif %}
+    <h2>{{ doctor.name }}</h2>
+    <div class="spec">{{ doctor.specialty }}</div>
+    <p>⭐ {{ doctor.rating }} · {{ doctor.experience }} saal ka anubhav</p>
+    <p class="fee">₹{{ doctor.fee }}</p>
+    {% if user.is_authenticated and user.role == 'patient' %}
+    <a class="btn" href="{% url 'appointments:book' %}?doctor={{ doctor.pk }}">Book Appointment</a>
+    {% elif not user.is_authenticated %}
+    <a class="btn" href="{% url 'accounts:login' %}">Login karke Book karein</a>
+    {% endif %}
+  </div>
+  <div class="card main">
+    <h3>About</h3>
+    <p>{{ doctor.about|default:"Jaankari jald add hogi." }}</p>
+    <h3>Education</h3>
+    <p>{{ doctor.education|default:"-" }}</p>
+    <h3>Contact</h3>
+    <p>📍 {{ doctor.city }}</p>
+    <p>📞 {{ doctor.phone|default:"-" }}</p>
+    <a href="{% url 'doctors:list' %}" class="btn btn-light" style="margin-top:14px;">&laquo; Back to list</a>
+  </div>
+</div>
+{% endblock %}
