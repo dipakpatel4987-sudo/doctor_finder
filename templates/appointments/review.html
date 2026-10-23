@@ -1,0 +1,18 @@
+{% extends layout %}
+{% block title %}Review | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:480px;">
+  <h2>Doctor ko Review dein</h2>
+  <p class="sub">{{ appt.doctor.name }} · {{ appt.date }}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      <div class="err">{{ field.errors|join:" " }}</div>
+    {% endfor %}
+    <button type="submit" class="btn btn-block">Review Submit Karein</button>
+  </form>
+  <div class="auth-foot"><a href="{% url 'appointments:patient_list' %}">&laquo; Wapas</a></div>
+</div>
+{% endblock %}

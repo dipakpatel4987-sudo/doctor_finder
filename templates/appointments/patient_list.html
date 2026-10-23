@@ -20,13 +20,18 @@
           {% else %}-{% endif %}
         </td>
         <td>
-          {% if a.status != 'Cancelled' %}
+          {% if a.can_review %}
+          <a class="mini ok" style="display:inline-block;background:#f5a623;" href="{% url 'appointments:review' a.pk %}">Review</a>
+          {% endif %}
+          {% if a.review %}<span class="tag Confirmed">{{ a.review.stars }}</span>{% endif %}
+
+          {% if a.status != 'Cancelled' and not a.review %}
           <a class="mini ok" style="display:inline-block;" href="{% url 'appointments:patient_reschedule' a.pk %}">Reschedule</a>
           <form method="post" action="{% url 'appointments:patient_cancel' a.pk %}" class="inline"
                 onsubmit="return confirm('Appointment cancel karni hai?');">
             {% csrf_token %}<button class="mini no">Cancel</button>
           </form>
-          {% else %}-{% endif %}
+          {% elif a.status == 'Cancelled' %}-{% endif %}
         </td>
       </tr>
       {% empty %}

@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 
 from apps.doctors.models import Doctor
-from .models import Appointment
+from .models import Appointment, Review
 
 INPUT = {'class': 'form-input'}
 
@@ -69,3 +69,17 @@ class RescheduleForm(forms.ModelForm):
             if taken.exists():
                 raise forms.ValidationError('Is doctor ka ye time slot pehle se book hai. Dusra time chuniye.')
         return data
+class ReviewForm(forms.ModelForm):
+    rating = forms.TypedChoiceField(
+        label='Rating',
+        coerce=int,
+        choices=[(5, '★★★★★  Bahut achha'), (4, '★★★★☆  Achha'), (3, '★★★☆☆  Theek-thaak'),
+                 (2, '★★☆☆☆  Kamzor'), (1, '★☆☆☆☆  Bahut kharab')],
+        widget=forms.Select(attrs=INPUT),
+    )
+
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {'comment': forms.Textarea(attrs={**INPUT, 'rows': 3})}
+        labels = {'comment': 'Comment (optional)'}

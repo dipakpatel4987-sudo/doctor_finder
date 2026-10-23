@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from apps.core.decorators import patient_required, doctor_required
 from apps.doctors.models import Doctor
 from . import notifications
-from .forms import BookingForm, RescheduleForm
+from .forms import BookingForm, RescheduleForm, ReviewForm
 from .models import Appointment
 
 
@@ -94,3 +94,19 @@ def doctor_update(request, pk, action):
     notifications.status_changed(appt)
     messages.success(request, f'Appointment {appt.status} ho gayi.')
     return redirect('appointments:doctor_list')
+@patient_required
+def review_create(request, pk):
+    appt = get_object_or_404(Appointment.objects.select_related('doctor'), pk=pk, patient=request.user)
+    if not appt.can_review:
+        messages.error(request, 'Is appointment ka review abhi nahi diya ja sakta.')
+        return redirect('appointments:patient_list')
+    form = ReviewForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        review = form.save(commit=False)
+        review.appointment = appt
+        review.patient = request.user
+        review.doctor = appt.doctor
+        review.save()
+        messages.success(request, 'Review dene ke liye shukriya!')
+        return redirect('appointments:patient_list')
+    return render(request, 'appointments/review.html', {'form': form, 'appt': appt})
