@@ -4,9 +4,9 @@ from django.views.decorators.http import require_POST
 
 from apps.core.decorators import patient_required, doctor_required
 from apps.doctors.models import Doctor
-from .forms import BookingForm
-from .models import Appointment
+from . import notifications
 from .forms import BookingForm, RescheduleForm
+from .models import Appointment
 
 
 @patient_required
@@ -15,13 +15,13 @@ def book(request):
     doc_id = request.GET.get('doctor')
     if doc_id and Doctor.objects.filter(pk=doc_id, is_available=True).exists():
         initial['doctor'] = doc_id
-    
 
     form = BookingForm(request.POST or None, initial=initial)
     if request.method == 'POST' and form.is_valid():
         appt = form.save(commit=False)
         appt.patient = request.user
         appt.save()
+        notifications.booking_created(appt)
         messages.success(request, 'Appointment request bhej di gayi. Ab payment karein.')
         return redirect('payments:summary', appt_id=appt.pk)
     return render(request, 'appointments/book.html', {'form': form})
@@ -40,8 +40,26 @@ def patient_cancel(request, pk):
     if appt.status in ('Pending', 'Confirmed'):
         appt.status = 'Cancelled'
         appt.save()
+        notifications.cancelled_by_patient(appt)
         messages.success(request, 'Appointment cancel ho gayi.')
     return redirect('appointments:patient_list')
+
+
+@patient_required
+def patient_reschedule(request, pk):
+    appt = get_object_or_404(Appointment.objects.select_related('doctor'), pk=pk, patient=request.user)
+    if appt.status == 'Cancelled':
+        messages.error(request, 'Cancelled appointment reschedule nahi ho sakti.')
+        return redirect('appointments:patient_list')
+    form = RescheduleForm(request.POST or None, instance=appt)
+    if request.method == 'POST' and form.is_valid():
+        appt = form.save(commit=False)
+        appt.status = 'Pending'
+        appt.save()
+        notifications.rescheduled(appt)
+        messages.success(request, 'Naya time bhej diya gaya. Doctor dobara confirm karega.')
+        return redirect('appointments:patient_list')
+    return render(request, 'appointments/reschedule.html', {'form': form, 'appt': appt})
 
 
 @doctor_required
@@ -73,19 +91,6 @@ def doctor_update(request, pk, action):
     else:
         return redirect('appointments:doctor_list')
     appt.save()
+    notifications.status_changed(appt)
     messages.success(request, f'Appointment {appt.status} ho gayi.')
     return redirect('appointments:doctor_list')
-@patient_required
-def patient_reschedule(request, pk):
-    appt = get_object_or_404(Appointment.objects.select_related('doctor'), pk=pk, patient=request.user)
-    if appt.status == 'Cancelled':
-        messages.error(request, 'Cancelled appointment reschedule nahi ho sakti.')
-        return redirect('appointments:patient_list')
-    form = RescheduleForm(request.POST or None, instance=appt)
-    if request.method == 'POST' and form.is_valid():
-        appt = form.save(commit=False)
-        appt.status = 'Pending'
-        appt.save()
-        messages.success(request, 'Naya time bhej diya gaya. Doctor dobara confirm karega.')
-        return redirect('appointments:patient_list')
-    return render(request, 'appointments/reschedule.html', {'form': form, 'appt': appt})
