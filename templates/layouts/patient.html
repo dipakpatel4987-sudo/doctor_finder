@@ -1,8 +1,10 @@
 {% extends 'layouts/base.html' %}
 {% block nav %}
 <nav class="nav nav-patient">
-  <div class="logo"><a href="{% url 'accounts:patient_home' %}">Doctor<span>Finder</span></a><span class="tag">Patient
-      Panel</span></div>
+  <div class="logo">
+    <a href="{% url 'accounts:patient_home' %}">Doctor<span>Finder</span></a>
+    <span class="tag">Patient Panel</span>
+  </div>
   <ul>
     <li><a href="{% url 'accounts:patient_home' %}">Dashboard</a></li>
     <li><a href="{% url 'doctors:list' %}">Find Doctors</a></li>
@@ -10,11 +12,11 @@
     <li><a href="{% url 'appointments:book' %}">Book</a></li>
     <li><a href="{% url 'appointments:patient_list' %}">My Appointments</a></li>
     <li><a href="{% url 'payments:history' %}">Payments</a></li>
-    <li>
     <li><a href="{% url 'accounts:profile' %}">My Profile</a></li>
-    <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
-      {% csrf_token %}<button type="submit">Logout ({{ user.first_name|default:user.email }})</button>
-    </form>
+    <li>
+      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+        {% csrf_token %}<button type="submit">Logout ({{ user.first_name|default:user.email }})</button>
+      </form>
     </li>
   </ul>
 </nav>
