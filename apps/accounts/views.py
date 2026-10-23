@@ -47,7 +47,7 @@ def dashboard(request):
     """Role dekh kar sahi panel par bhejta hai."""
     user = request.user
     if user.is_superuser or user.role == 'admin':
-        return redirect('/admin/')
+        return redirect('core:admin_dashboard')
     if user.role == 'doctor':
         if user.is_approved:
             return redirect('accounts:doctor_home')

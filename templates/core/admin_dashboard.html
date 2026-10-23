@@ -1,0 +1,90 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Admin Dashboard | Doctor Finder{% endblock %}
+
+{% block nav %}
+<nav class="nav" style="background:#111827;">
+  <div class="logo"><a href="{% url 'core:admin_dashboard' %}">Doctor<span>Finder</span></a><span class="tag">Admin</span></div>
+  <ul>
+    <li><a href="{% url 'core:admin_dashboard' %}">Dashboard</a></li>
+    <li><a href="/admin/">Django Admin</a></li>
+    <li>
+      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+        {% csrf_token %}<button type="submit">Logout</button>
+      </form>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:30px 0;">
+  <h1 class="page-head" style="margin-top:0;">Admin Dashboard</h1>
+
+  <div class="stats">
+    <div class="stat"><b>{{ patients }}</b>Patients</div>
+    <div class="stat"><b>{{ doctors }}</b>Doctors</div>
+    <div class="stat"><b>{{ appointments }}</b>Appointments</div>
+    <div class="stat"><b>₹{{ revenue }}</b>Total Kamayi</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>{{ pending }}</b>Pending</div>
+    <div class="stat"><b>{{ confirmed }}</b>Confirmed</div>
+    <div class="stat"><b>{{ cancelled }}</b>Cancelled</div>
+  </div>
+
+  <h2 class="section-title" style="margin-top:30px;">Approval Pending Doctors ({{ pending_doctors|length }})</h2>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Naam</th><th>Email</th><th>Phone</th><th>Action</th></tr>
+      {% for u in pending_doctors %}
+      <tr>
+        <td>{{ u.first_name }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.phone|default:"-" }}</td>
+        <td>
+          <form method="post" action="{% url 'core:approve_doctor' u.pk %}" class="inline">
+            {% csrf_token %}<button class="mini ok">Approve</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">Koi doctor approval ke liye pending nahi hai.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <h2 class="section-title" style="margin-top:30px;">Top Doctors</h2>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Doctor</th><th>Specialty</th><th>City</th><th>Rating</th><th>Appointments</th></tr>
+      {% for d in top_doctors %}
+      <tr>
+        <td>{{ d.name }}</td><td>{{ d.specialty }}</td><td>{{ d.city }}</td>
+        <td>⭐ {{ d.rating }}</td><td>{{ d.n }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">Abhi koi doctor nahi hai.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <h2 class="section-title" style="margin-top:30px;">Recent Appointments</h2>
+  <div class="scroll">
+    <table class="table">
+      <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr>
+      {% for a in recent %}
+      <tr>
+        <td>{{ a.patient.first_name }}</td>
+        <td>{{ a.doctor.name }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time|time:"h:i A" }}</td>
+        <td><span class="tag {{ a.status }}">{{ a.status }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">Abhi koi appointment nahi hai.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

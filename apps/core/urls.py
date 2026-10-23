@@ -5,4 +5,6 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('admin-panel/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-panel/approve/<int:pk>/', views.approve_doctor, name='approve_doctor'),
 ]
