@@ -1,0 +1,44 @@
+{% extends layout %}
+{% load static %}
+{% block title %}My Schedule (AJAX) | Doctor Finder{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:30px 0;"
+     id="app" data-api="{% url 'doctors:api_availability' %}" data-csrf="{{ csrf_token }}">
+  <h1 class="page-head" style="margin-top:0;">Mera Weekly Schedule</h1>
+  <p style="text-align:center;color:#777;margin-bottom:16px;">Is page par add, edit aur delete bina reload ke hota hai.</p>
+
+  <div id="alert"></div>
+
+  <div class="auth-box" style="max-width:520px;margin-bottom:26px;">
+    <h2 id="form-title" style="font-size:20px;">Naya time jodein</h2>
+    <form id="form" novalidate>
+      <label for="id_weekday">Din</label>
+      {{ form.weekday }}
+      <div class="err" data-err="weekday"></div>
+
+      <label for="id_start_time">Shuru</label>
+      {{ form.start_time }}
+      <div class="err" data-err="start_time"></div>
+
+      <label for="id_end_time">Khatam</label>
+      {{ form.end_time }}
+      <div class="err" data-err="end_time"></div>
+
+      <div class="err" data-err="__all__"></div>
+
+      <button type="submit" class="btn btn-block" id="submit-btn">Add</button>
+      <button type="button" class="btn btn-light btn-block" id="cancel-edit" style="display:none;">Edit cancel karein</button>
+    </form>
+  </div>
+
+  <div class="scroll">
+    <table class="table">
+      <thead><tr><th>Din</th><th>Shuru</th><th>Khatam</th><th>Action</th></tr></thead>
+      <tbody id="rows"><tr><td colspan="4">Load ho raha hai...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}<script src="{% static 'js/schedule_ajax.js' %}"></script>{% endblock %}

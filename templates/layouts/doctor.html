@@ -9,7 +9,7 @@
     <li><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
     <li><a href="{% url 'appointments:doctor_list' %}">Appointments</a></li>
     <li><a href="{% url 'doctors:edit' %}">Doctor Profile</a></li>
-    <li><a href="{% url 'doctors:availability' %}">My Schedule</a></li>
+    <li><a href="{% url 'doctors:schedule_live' %}">My Schedule</a></li>
     <li><a href="{% url 'accounts:profile' %}">My Account</a></li>
     <li>
       <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">

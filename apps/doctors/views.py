@@ -99,3 +99,10 @@ def availability_delete(request, pk):
         row.delete()
         messages.success(request, 'Schedule se hata diya gaya.')
     return redirect('doctors:availability')
+@doctor_required
+def schedule_live(request):
+    profile = getattr(request.user, 'doctor_profile', None)
+    if profile is None:
+        messages.error(request, 'Aapka account abhi Doctor profile se link nahi hai. Admin se link karwayein.')
+        return redirect('accounts:doctor_home')
+    return render(request, 'doctors/schedule_live.html', {'form': AvailabilityForm()})
