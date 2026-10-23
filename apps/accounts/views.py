@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
+from .forms import SignupForm, LoginForm, ProfileForm
 
 from apps.core.decorators import patient_required, doctor_required
 from .forms import SignupForm, LoginForm
@@ -75,3 +76,11 @@ def doctor_home(request):
         'confirmed': appts.filter(status='Confirmed').count(),
         'cancelled': appts.filter(status='Cancelled').count(),
     })
+@login_required
+def profile(request):
+    form = ProfileForm(request.POST or None, instance=request.user)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Profile update ho gayi.')
+        return redirect('accounts:profile')
+    return render(request, 'accounts/profile.html', {'form': form})

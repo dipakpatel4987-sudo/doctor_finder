@@ -11,9 +11,10 @@
     <li><a href="{% url 'appointments:patient_list' %}">My Appointments</a></li>
     <li><a href="{% url 'payments:history' %}">Payments</a></li>
     <li>
-      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
-        {% csrf_token %}<button type="submit">Logout ({{ user.first_name|default:user.email }})</button>
-      </form>
+    <li><a href="{% url 'accounts:profile' %}">My Profile</a></li>
+    <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+      {% csrf_token %}<button type="submit">Logout ({{ user.first_name|default:user.email }})</button>
+    </form>
     </li>
   </ul>
 </nav>

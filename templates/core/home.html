@@ -1,10 +1,53 @@
 {% extends 'layouts/base.html' %}
 {% block title %}Home | Doctor Finder{% endblock %}
 {% block content %}
-<section class="welcome" style="border-radius:0;text-align:center;padding:90px 6%;margin:0;">
-  <h1 style="font-size:clamp(28px,5vw,48px);margin-bottom:12px;">Welcome to Doctor Finder</h1>
-  <p style="opacity:.9;margin-bottom:28px;">Apne shahar ke best doctors dhundo aur appointment book karo.</p>
-  <a href="{% url 'accounts:login' %}" class="btn" style="background:#fff;color:var(--blue);">Login</a>
-  <a href="{% url 'accounts:signup' %}" class="btn">Sign Up</a>
+
+<section class="hero">
+  <h1>Welcome to Doctor Finder</h1>
+  <p>Apne shahar ke best doctors dhundo aur appointment book karo.</p>
+  <form action="{% url 'doctors:list' %}" method="get" class="hero-search">
+    <input class="form-input" type="text" name="q" placeholder="Doctor ya specialty (e.g. Dentist)">
+    <input class="form-input" type="text" name="city" placeholder="City">
+    <button class="btn" type="submit">Find a Doctor</button>
+  </form>
+  <p class="hero-links">
+    <a href="{% url 'accounts:login' %}" class="btn btn-white">Login</a>
+    <a href="{% url 'accounts:signup' %}" class="btn">Sign Up</a>
+  </p>
 </section>
+
+<div class="container">
+  <h2 class="section-title">Why Choose Us</h2>
+  <div class="grid">
+    <div class="card feature"><div class="ic">✅</div><h3>Verified Doctors</h3><p>Doctors admin approval ke baad hi panel use karte hain.</p></div>
+    <div class="card feature"><div class="ic">📅</div><h3>Easy Booking</h3><p>Kuch clicks me appointment aur payment.</p></div>
+    <div class="card feature"><div class="ic">📍</div><h3>Doctors Near You</h3><p>Map par apne paas ke doctors dekhein.</p></div>
+  </div>
+
+  {% if top_doctors %}
+  <h2 class="section-title">Top Doctors</h2>
+  <div class="grid">
+    {% for d in top_doctors %}
+    <div class="card doc-card">
+      {% if d.photo %}<img class="doc-photo" src="{{ d.photo.url }}" alt="{{ d.name }}">
+      {% else %}<div class="doc-photo">{{ d.name|slice:"4:5" }}</div>{% endif %}
+      <h3>{{ d.name }}</h3>
+      <small>{{ d.specialty }}</small>
+      <p>{{ d.city }} · ₹{{ d.fee }} · ⭐ {{ d.rating }}</p>
+      <a href="{% url 'doctors:detail' d.pk %}" class="btn">View Profile</a>
+    </div>
+    {% endfor %}
+  </div>
+  <p style="text-align:center;margin-top:22px;">
+    <a class="btn btn-light" href="{% url 'doctors:list' %}">Saare {{ doctor_count }} doctors dekhein</a>
+  </p>
+  {% endif %}
+
+  <h2 class="section-title">How It Works</h2>
+  <div class="grid">
+    <div class="card feature"><div class="num">1</div><h3>Sign Up</h3><p>Patient ya Doctor account banayein.</p></div>
+    <div class="card feature"><div class="num">2</div><h3>Doctor Chunein</h3><p>Search aur filter se sahi doctor dhundein.</p></div>
+    <div class="card feature"><div class="num">3</div><h3>Book aur Pay</h3><p>Date, time chunein aur payment karein.</p></div>
+  </div>
+</div>
 {% endblock %}

@@ -7,9 +7,10 @@
     <li><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
     <li><a href="{% url 'appointments:doctor_list' %}">Appointments</a></li>
     <li>
-      <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
-        {% csrf_token %}<button type="submit">Logout (Dr. {{ user.first_name|default:user.email }})</button>
-      </form>
+    <li><a href="{% url 'accounts:profile' %}">My Profile</a></li>
+    <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+      {% csrf_token %}<button type="submit">Logout (Dr. {{ user.first_name|default:user.email }})</button>
+    </form>
     </li>
   </ul>
 </nav>

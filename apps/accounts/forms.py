@@ -73,3 +73,25 @@ class SignupForm(forms.ModelForm):
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={**INPUT, 'autofocus': True}))
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs=INPUT))
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'phone']
+        labels = {'first_name': 'Full Name', 'phone': 'Phone (10 digit)'}
+        widgets = {
+            'first_name': forms.TextInput(attrs=INPUT),
+            'phone': forms.TextInput(attrs={**INPUT, 'maxlength': 10}),
+        }
+
+    def clean_first_name(self):
+        name = self.cleaned_data['first_name'].strip()
+        if len(name) < 3:
+            raise forms.ValidationError('Naam kam se kam 3 akshar ka ho.')
+        return name
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone'].strip()
+        if not re.fullmatch(r'[6-9]\d{9}', phone):
+            raise forms.ValidationError('10 digit number daalein (6-9 se shuru).')
+        return phone

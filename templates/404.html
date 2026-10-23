@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Page Not Found | Doctor Finder{% endblock %}
+{% block content %}
+<div class="card" style="max-width:520px;margin:70px auto;text-align:center;">
+  <div style="font-size:60px;">🩺</div>
+  <h1 style="color:var(--blue);">404</h1>
+  <p style="color:#555;margin:8px 0 18px;">Ye page nahi mila. Link galat ho sakta hai ya page hat gaya hai.</p>
+  <a href="{% url 'core:home' %}" class="btn">Home par jaayein</a>
+</div>
+{% endblock %}

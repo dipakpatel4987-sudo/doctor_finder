@@ -1,0 +1,17 @@
+{% extends layout %}
+{% block title %}My Profile | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:520px;">
+  <h2>My Profile</h2>
+  <p class="sub">{{ user.email }} · {{ user.get_role_display }}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      <div class="err">{{ field.errors|join:" " }}</div>
+    {% endfor %}
+    <button type="submit" class="btn btn-block">Save Changes</button>
+  </form>
+</div>
+{% endblock %}
