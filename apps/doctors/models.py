@@ -34,5 +34,34 @@ class Doctor(models.Model):
     class Meta:
         ordering = ['-rating', 'name']
 
+    def check_slot(self, d, t):
+        """Date/time doctor ke schedule me hai? Galat ho to message deta hai, theek ho to None."""
+        rows = list(self.availability.all())
+        if not rows:
+            return None  # schedule set nahi, to koi bhi time chalega
+        day_rows = [r for r in rows if r.weekday == d.weekday()]
+        if not day_rows:
+            return f'{self.name} {d:%A} ko available nahi hain.'
+        if not any(r.start_time <= t < r.end_time for r in day_rows):
+            return 'Ye time doctor ke available time se bahar hai. Doctor ka schedule dekhein.'
+        return None
+
     def __str__(self):
         return f'{self.name} ({self.specialty})'
+
+
+class Availability(models.Model):
+    DAYS = [(0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'),
+            (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday')]
+
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='availability')
+    weekday = models.PositiveSmallIntegerField(choices=DAYS)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    class Meta:
+        ordering = ['weekday', 'start_time']
+        verbose_name_plural = 'Availability'
+
+    def __str__(self):
+        return f'{self.doctor.name}: {self.get_weekday_display()} {self.start_time:%H:%M}-{self.end_time:%H:%M}'

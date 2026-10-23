@@ -35,10 +35,15 @@ class BookingForm(forms.ModelForm):
         data = super().clean()
         doctor, d, t = data.get('doctor'), data.get('date'), data.get('time')
         if doctor and d and t:
+            msg = doctor.check_slot(d, t)
+            if msg:
+                raise forms.ValidationError(msg)
             taken = Appointment.objects.filter(doctor=doctor, date=d, time=t).exclude(status='Cancelled')
             if taken.exists():
                 raise forms.ValidationError('Is doctor ka ye time slot pehle se book hai. Dusra time chuniye.')
         return data
+
+
 class RescheduleForm(forms.ModelForm):
     class Meta:
         model = Appointment
@@ -62,6 +67,9 @@ class RescheduleForm(forms.ModelForm):
         data = super().clean()
         d, t = data.get('date'), data.get('time')
         if d and t:
+            msg = self.instance.doctor.check_slot(d, t)
+            if msg:
+                raise forms.ValidationError(msg)
             taken = (Appointment.objects
                      .filter(doctor=self.instance.doctor, date=d, time=t)
                      .exclude(pk=self.instance.pk)
@@ -69,6 +77,8 @@ class RescheduleForm(forms.ModelForm):
             if taken.exists():
                 raise forms.ValidationError('Is doctor ka ye time slot pehle se book hai. Dusra time chuniye.')
         return data
+
+
 class ReviewForm(forms.ModelForm):
     rating = forms.TypedChoiceField(
         label='Rating',

@@ -16,14 +16,36 @@
     <a class="btn" href="{% url 'accounts:login' %}">Login karke Book karein</a>
     {% endif %}
   </div>
+
   <div class="card main">
     <h3>About</h3>
     <p>{{ doctor.about|default:"Jaankari jald add hogi." }}</p>
+
     <h3>Education</h3>
     <p>{{ doctor.education|default:"-" }}</p>
+
+    <h3>Weekly Schedule</h3>
+    {% for r in doctor.availability.all %}
+      <p>🕒 {{ r.get_weekday_display }}: {{ r.start_time|time:"h:i A" }} - {{ r.end_time|time:"h:i A" }}</p>
+    {% empty %}
+      <p>Schedule jald add hoga. Abhi kisi bhi time request bhej sakte hain.</p>
+    {% endfor %}
+
     <h3>Contact</h3>
     <p>📍 {{ doctor.city }}</p>
     <p>📞 {{ doctor.phone|default:"-" }}</p>
+
+    <h3>Reviews ({{ review_count }})</h3>
+    {% for r in reviews %}
+      <div class="review">
+        <b>{{ r.patient.first_name }}</b> <span class="stars">{{ r.stars }}</span>
+        <small style="color:#888;">{{ r.created_at|date:"d M Y" }}</small>
+        {% if r.comment %}<p>{{ r.comment }}</p>{% endif %}
+      </div>
+    {% empty %}
+      <p>Abhi koi review nahi hai.</p>
+    {% endfor %}
+
     <a href="{% url 'doctors:list' %}" class="btn btn-light" style="margin-top:14px;">&laquo; Back to list</a>
   </div>
 </div>
