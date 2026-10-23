@@ -1,0 +1,19 @@
+{% extends layout %}
+{% block title %}Reschedule | Doctor Finder{% endblock %}
+{% block content %}
+<div class="auth-box" style="max-width:480px;">
+  <h2>Reschedule Appointment</h2>
+  <p class="sub">{{ appt.doctor.name }} · abhi: {{ appt.date }}, {{ appt.time|time:"h:i A" }}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="err">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      <div class="err">{{ field.errors|join:" " }}</div>
+    {% endfor %}
+    <button type="submit" class="btn btn-block">Naya Time Save Karein</button>
+  </form>
+  <div class="auth-foot"><a href="{% url 'appointments:patient_list' %}">&laquo; Wapas</a></div>
+</div>
+{% endblock %}

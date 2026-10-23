@@ -21,6 +21,7 @@
         </td>
         <td>
           {% if a.status != 'Cancelled' %}
+          <a class="mini ok" style="display:inline-block;" href="{% url 'appointments:patient_reschedule' a.pk %}">Reschedule</a>
           <form method="post" action="{% url 'appointments:patient_cancel' a.pk %}" class="inline"
                 onsubmit="return confirm('Appointment cancel karni hai?');">
             {% csrf_token %}<button class="mini no">Cancel</button>

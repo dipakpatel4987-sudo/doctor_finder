@@ -6,6 +6,7 @@ from apps.core.decorators import patient_required, doctor_required
 from apps.doctors.models import Doctor
 from .forms import BookingForm
 from .models import Appointment
+from .forms import BookingForm, RescheduleForm
 
 
 @patient_required
@@ -74,3 +75,17 @@ def doctor_update(request, pk, action):
     appt.save()
     messages.success(request, f'Appointment {appt.status} ho gayi.')
     return redirect('appointments:doctor_list')
+@patient_required
+def patient_reschedule(request, pk):
+    appt = get_object_or_404(Appointment.objects.select_related('doctor'), pk=pk, patient=request.user)
+    if appt.status == 'Cancelled':
+        messages.error(request, 'Cancelled appointment reschedule nahi ho sakti.')
+        return redirect('appointments:patient_list')
+    form = RescheduleForm(request.POST or None, instance=appt)
+    if request.method == 'POST' and form.is_valid():
+        appt = form.save(commit=False)
+        appt.status = 'Pending'
+        appt.save()
+        messages.success(request, 'Naya time bhej diya gaya. Doctor dobara confirm karega.')
+        return redirect('appointments:patient_list')
+    return render(request, 'appointments/reschedule.html', {'form': form, 'appt': appt})

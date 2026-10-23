@@ -157,4 +157,5 @@ form.inline { display:inline; }
 .feature h3 { color:var(--blue); margin-bottom:6px; }
 .feature p { color:#555; font-size:14px; }
 .feature .num { width:44px; height:44px; border-radius:50%; background:var(--teal); color:#fff;
-                font-weight:700; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; }
+font-weight:700; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; }
+a.mini { text-decoration:none; color:#fff; font-size:13px; }
