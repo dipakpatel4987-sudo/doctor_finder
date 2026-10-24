@@ -159,3 +159,12 @@ form.inline { display:inline; }
 .feature .num { width:44px; height:44px; border-radius:50%; background:var(--teal); color:#fff;
 font-weight:700; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; }
 a.mini { text-decoration:none; color:#fff; font-size:13px; }
+/* Django built-in forms (password reset) */
+.auth-box input[type=email],
+.auth-box input[type=password],
+.auth-box input[type=text] { width:100%; padding:12px 14px; border:2px solid #cfdde2;
+                             border-radius:10px; font-family:inherit; background:#fff; }
+.auth-box input[type=email]:focus,
+.auth-box input[type=password]:focus,
+.auth-box input[type=text]:focus { outline:none; border-color:var(--teal); }
+.auth-box ul { margin:6px 0 0 18px; font-size:12px; color:#777; }

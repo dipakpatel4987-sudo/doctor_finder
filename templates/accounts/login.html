@@ -17,6 +17,7 @@
     <button type="submit" class="btn btn-block">Login</button>
   </form>
 
+  <div class="auth-foot" style="margin-top:10px;"><a href="{% url 'accounts:password_reset' %}">Password bhool gaye?</a></div>
   <div class="auth-foot">Naya account? <a href="{% url 'accounts:signup' %}">Sign Up</a></div>
 </div>
 {% endblock %}
